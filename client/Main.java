@@ -31,40 +31,7 @@ public class Main {
         } else {
             jsonRequest = new Gson().toJson(inputArgs);
         }
-        System.out.println(jsonRequest);
-        Invoker invoker = new Invoker();
-        Session session = new Session();
-        CommandType commandType = CommandType.getCommandTypeFromString(inputArgs.type);
-        if (inputArgs.filename != null) {
-            commandType = CommandType.READ_FROM_FILE;
-        }
-        switch (commandType) {
-            case GET -> {
-                Command getCommand = new GetCommand(session, inputArgs.key);
-                invoker.setCommand(getCommand);
-                invoker.executeCommand();
-            }
-            case SET -> {
-                Command setCommand = new SetCommand(session, inputArgs.key, inputArgs.value);
-                invoker.setCommand(setCommand);
-                invoker.executeCommand();
-            }
-            case DELETE -> {
-                Command deleteCommand = new DeleteCommand(session, inputArgs.key);
-                invoker.setCommand(deleteCommand);
-                invoker.executeCommand();
-            }
-            case READ_FROM_FILE -> {
-                Command readFromFile = new ReadFromFileCommand(session, inputArgs.filename);
-                invoker.setCommand(readFromFile);
-                invoker.executeCommand();
-            }
-            case EXIT -> {
-                Command exitCommand = new ExitCommand(session);
-                invoker.setCommand(exitCommand);
-                invoker.executeCommand();
-            }
-        }
+        new Session().send(jsonRequest);
     }
 
     public static String readFile(String filename) {
